@@ -1,12 +1,13 @@
 program zfp_example
   use, intrinsic :: iso_c_binding
+  use, intrinsic :: iso_fortran_env, only: wp => real32
   use zfp
   implicit none
   integer, parameter :: nx = 100
   integer, parameter :: ny = 100
   integer, parameter :: nz = 100
-  real(8), dimension(nx, ny, nz) :: array
-  real(8) :: x, y, z
+  real(wp), dimension(nz, nx, ny) :: array
+  real(wp) :: x, y, z
   logical :: decompress
   integer :: i, j, k
 
@@ -32,6 +33,49 @@ program zfp_example
   call compress(array, nx, ny, nz, 1.0d-3, decompress)
 
 contains
+
+  subroutine compress(m, n, l, indata, tolerance, precision, rate, parallel)
+    integer, intent(in) :: m, n, l
+    real(wp), intent(inout), target :: indata(m,n,l)
+    real(wp), optional :: tolerance, precision, rate
+    logical, optional :: parallel
+    character, intent(out), allocatable, target :: buffer(:)
+
+    type(zFORp_field) :: field
+    type(zFORp_bitstream) :: bs, stream
+    type(zFORp_stream) :: zfp
+    type(c_ptr) :: uncompressed_ptr
+    integer :: data_type
+
+    if (.not. (present(tolerance) .or. present(precision) .or. present(rate))) stop ''
+    if((present(tolerance) .and. present(precision))) stop ''
+    if((present(tolerance) .and. present(rate))) stop ''
+    if((present(rate) .and. present(precision))) stop ''
+
+    field = zFORp_field_3d(uncompressed_ptr, scalar_type , nx, ny, nz)
+    zfp = zFORp_stream_open(bs)
+    data_type = zFORp_type_double
+
+    if (present(tolerance)) then
+      acc = zFORp_stream_set_accuracy(zfp, tolerance)
+    !else if (present(precision)) then
+    !        zFORp_stream_set_precision(zfp, precision)
+    !else if (present(rate)) then 
+    !        zFORp_stream_set_rate(zfp, rate, data_type, 3, 0)
+    endif
+
+    bufsize = zFORp_stream_maximum_size(zfp, field)
+    allocate(buffer(bufsize))
+
+    stream = zFORp_bitstream_stream_open(c_loc(buffer), bufsize)
+    call zFORp_stream_set_bit_stream(zfp, stream)
+    call zFORp_stream_rewind(zfp)
+    zfpsize = zFORp_compress(zfp, field)
+
+    call zFORp_field_free(field)
+    call zFORp_stream_close(zfp)
+    call zFORp_bitstream_stream_close(stream)
+  end subroutine compress
 
   subroutine compress(array, nx, ny, nz, tolerance, decompress)
     real(8), intent(inout), dimension(:,:,:), target :: array
