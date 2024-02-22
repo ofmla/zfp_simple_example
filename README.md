@@ -6,7 +6,7 @@ This repository demonstrates how to integrate the Fortran bindings for the ZFP l
 
 ## Overview
 
-[ZFP](https://github.com/LLNL/zfp) is a compressed numerical library that provides high-throughput, low-loss compression of floating-point and integer arrays. This repository focuses on integrating the Fortran bindings for ZFP into a Fortran project, showcasing its usage through a simple example. 
+[ZFP](https://github.com/LLNL/zfp) is an open-source library for compressed floating-point and integer arrays that support high throughput read and write random access. This repository focuses on integrating the Fortran bindings for ZFP into a Fortran project, showcasing its usage through a simple example. 
 
 The `zfp_example.f90` file contains the main program, which demonstrates the compression and decompression of a 3D array of 64-bit floats using the ZFP library. The `zfp_fct_wrapper.f90` file provides a Fortran module with functions for interacting with the ZFP library.
 
