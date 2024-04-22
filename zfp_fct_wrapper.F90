@@ -1,5 +1,5 @@
 module zfp_fct_wrapper
-  use, intrinsic :: iso_c_binding, only : c_long, c_double, c_loc, c_sizeof
+  use, intrinsic :: iso_c_binding, only : c_ptr, c_long, c_double, c_loc, c_sizeof
   use, intrinsic :: iso_fortran_env
   use zfp
 
@@ -43,7 +43,7 @@ module zfp_fct_wrapper
     if(present(tolerance) .and. present(precision)) stop 'only 1 parameter is allowed'
     if(present(tolerance) .and. present(rate)) stop 'only 1 parameter is allowed'
     if(present(rate) .and. present(precision)) stop 'only 1 parameter is allowed'
-    if(present(parallel) .and. (parallel .eq. .false.)) parl =.false.
+    if(present(parallel) .and. (parallel .eqv. .false.)) parl =.false.
 
     in_ptr = c_loc(indata); shap = shape(indata)
     if (c_sizeof(1._wp) .eq. 8) then
@@ -114,7 +114,7 @@ module zfp_fct_wrapper
     if(present(tolerance) .and. present(precision)) stop 'only 1 parameter is allowed'
     if(present(tolerance) .and. present(rate)) stop 'only 1 parameter is allowed'
     if(present(rate) .and. present(precision)) stop 'only 1 parameter is allowed'
-    if(present(parallel) .and. (parallel .eq. .false.)) parl =.false.
+    if(present(parallel) .and. (parallel .eqv. .false.)) parl =.false.
 
     out_ptr = c_loc(outdata); shap = shape(outdata)
     if (c_sizeof(1._wp) .eq. 8) then
