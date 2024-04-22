@@ -1,4 +1,4 @@
-name: SZ3 Fortran Bindings Testing
+name: zfp Fortran Testing
 
 # Define when to trigger the workflow
 on:
@@ -37,5 +37,11 @@ jobs:
           cmake -S . -B build -DREAL_KIND=REAL64 -DBUILD_EXAMPLES=ON
           cmake --build build
           ls -la
+          cd build
           ./exe -c
           ./exe -d 
+          cd bin
+          ./simple > compressed_c.zfp
+          ./simple -d < compressed_c.zfp > decompressed_c.zfp
+          cmp ../compressed.zfp compressed_c.zfp && echo "Files are identical" || { echo "Files are different"; exit 1; }
+          cmp ../decompressed.zfp decompressed_c.zfp && echo "Files are identical" || { echo "Files are different"; exit 1; }
