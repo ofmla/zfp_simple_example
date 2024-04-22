@@ -6,7 +6,15 @@ module zfp_fct_wrapper
   implicit none
   private
 
-  integer,parameter,public :: wp = real64
+#ifdef REAL32
+  integer, parameter, public :: zfp_fct_rk = real32   !! real kind used by this module [4 bytes]
+#elif REAL64
+  integer, parameter, public :: zfp_fct_rk = real64   !! real kind used by this module [8 bytes]
+#else
+  integer, parameter, public :: zfp_fct_rk = real64   !! real kind used by this module [8 bytes]
+#endif
+
+  integer, parameter, public :: wp = zfp_fct_rk 
   public :: compress, decompress
 
   contains
