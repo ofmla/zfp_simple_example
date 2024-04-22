@@ -1,0 +1,41 @@
+name: SZ3 Fortran Bindings Testing
+
+# Define when to trigger the workflow
+on:
+  push:
+    branches: [main, ci_workflow]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test_bindings:
+    name: Test zfp Fortran example on ubuntu-latest
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        gcc-version: [9, 10, 11]
+
+    steps:
+      # Setup GCC
+      - name: Get compiler
+        uses: fortran-lang/setup-fortran@v1
+        with:
+          compiler: gcc
+          version: ${{ matrix.gcc-version }}
+
+      # Clone the own repository to access test data files
+      - name: Clone own repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Build executable and compare output files
+      - name: Build executable and compare files
+        run: |
+          cmake -S . -B build -DREAL64 -DBUILD_EXAMPLES=ON
+          cmake --build build
+          ls -la
+          ./exe -c
+          ./exe -d 
