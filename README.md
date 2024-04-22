@@ -3,7 +3,7 @@
 [![Fortran](https://img.shields.io/badge/Fortran-734f96?logo=fortran&style=flat)](https://fortran-lang.org)
 ![Build Status](https://github.com/ofmla/zfp_simple_example/actions/workflows/CI.yml/badge.svg)
 
-This repository demonstrates how to integrate the [Fortran bindings for the ZFP library] (https://github.com/LLNL/zfp/blob/develop/fortran/zfp.f90) into a simple example that illustrates compression and decompression of a double-precision 3D array.
+This repository demonstrates how to integrate the [Fortran bindings for the ZFP library](https://github.com/LLNL/zfp/blob/develop/fortran/zfp.f90) into a simple example that illustrates compression and decompression of a double-precision 3D array.
 
 ## Overview
 
