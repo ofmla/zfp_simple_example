@@ -34,7 +34,7 @@ jobs:
       # Build executable and compare output files
       - name: Build executable and compare files
         run: |
-          cmake -S . -B build -DREAL64 -DBUILD_EXAMPLES=ON
+          cmake -S . -B build -DREAL_KIND=REAL64 -DBUILD_EXAMPLES=ON
           cmake --build build
           ls -la
           ./exe -c
