@@ -25,8 +25,17 @@ FetchContent_Declare(
 # Download and make the zfp library available
 FetchContent_MakeAvailable("zfp")
 
+# Real kind
+SET(REAL_KIND "REAL64" CACHE STRING "Real kind parameter")
+SET_PROPERTY(CACHE REAL_KIND PROPERTY STRINGS REAL32 REAL64)
+if(${REAL_KIND} MATCHES "REAL32")
+  add_definitions(-DREAL32)
+elseif(${_REAL_KIND} MATCHES "REAL64")
+  add_definitions(-DREAL64)
+endif()
+
 # Add executable target with Fortran source files
-add_executable(exe zfp_example.f90 zfp_fct_wrapper.f90)
+add_executable(exe zfp_example.f90 zfp_fct_wrapper.F90)
 
 # Link the zfp and zFORp libraries to the executable target
 target_link_libraries(exe zfp zFORp)
