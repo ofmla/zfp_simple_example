@@ -15,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        gcc-version: [9, 10, 11]
+        gcc-version: [10, 11, 12]
 
     steps:
       # Setup GCC
@@ -32,12 +32,15 @@ jobs:
           fetch-depth: 0
 
       # Build executable and compare output files
-      - name: Build executable and compare files
+      - name: Build simple and exe executables and compare files
         run: |
-          cmake -S . -B build -DREAL_KIND=REAL64 -DBUILD_EXAMPLES=ON
+          cmake -S . -B build -DREAL_KIND=REAL64 -DBUILD_EXAMPLES=ON -DCMAKE_VERBOSE_MAKEFILE=ON
           cmake --build build
-          ls -la
           cd build
           ./exe -c
           ./exe -d
-          ls -la
+          cd _deps/zfp-build/bin/
+          ./simple > compressed_c.zfp
+          ./simple -d < compressed_c.zfp > decompressed_c.zfp
+          cmp compressed_c.zfp ../../../compressed.zfp && echo "Files are identical" || { echo "Files are different"; exit 1; }
+          cmp decompressed_c.zfp ../../../decompressed.zfp && echo "Files are identical" || { echo "Files are different"; exit 1; }
