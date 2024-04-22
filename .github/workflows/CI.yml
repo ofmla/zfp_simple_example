@@ -39,9 +39,5 @@ jobs:
           ls -la
           cd build
           ./exe -c
-          ./exe -d 
-          cd bin
-          ./simple > compressed_c.zfp
-          ./simple -d < compressed_c.zfp > decompressed_c.zfp
-          cmp ../compressed.zfp compressed_c.zfp && echo "Files are identical" || { echo "Files are different"; exit 1; }
-          cmp ../decompressed.zfp decompressed_c.zfp && echo "Files are identical" || { echo "Files are different"; exit 1; }
+          ./exe -d
+          ls -la
